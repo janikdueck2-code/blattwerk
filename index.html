@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BlattWerk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,400&family=Karla:wght@400;500;700&display=swap">
+<style>
+:root{--bg:#f6f8f3;--card:#fff;--text:#1f2a1f;--muted:#5d6b5d;--accent:#3f8f4f;--accent-soft:#e2f1e4;--border:#d9e2d6;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141a14;--card:#1d261d;--text:#e8efe6;--muted:#9fb09c;--accent:#6cc47c;--accent-soft:#25362a;--border:#2f3d2f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+header{padding:32px 20px 8px;max-width:1000px;margin:0 auto}
+h1{margin:0 0 4px;font-size:2rem}
+header p{margin:0;color:var(--muted)}
+.search{flex:1;min-width:260px;display:flex;gap:8px}
+.search input[type="search"]{flex:1;min-width:0}
+.camBtn{padding:10px 14px;border:1px solid var(--accent);border-radius:10px;background:var(--accent);color:#fff;font-size:1rem;cursor:pointer}
+.camBtn:disabled{opacity:.6}
+.scan{max-width:960px;width:calc(100% - 40px);margin:8px auto 0;background:var(--accent-soft);color:var(--text);border-radius:10px;padding:10px 14px}
+.tabs{max-width:1000px;margin:16px auto 0;padding:0 20px;display:flex;gap:8px;overflow-x:auto}
+.tabs button{padding:10px 18px;border:1px solid var(--border);border-radius:999px;background:var(--card);color:var(--text);font-size:1rem;cursor:pointer;white-space:nowrap}
+.tabs button.on{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.tools{max-width:1000px;margin:16px auto;padding:0 20px;display:flex;flex-wrap:wrap;gap:10px}
+input,select{padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-size:1rem}
+input{flex:1;min-width:200px}
+#count{max-width:1000px;margin:0 auto;padding:0 20px;color:var(--muted);font-size:.9rem}
+main{max-width:1000px;margin:12px auto 40px;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;cursor:pointer;transition:transform .15s}
+.card:hover{transform:translateY(-3px)}
+.emoji{font-size:2.4rem}
+.card h2{margin:4px 0 0;font-size:1.15rem}
+.latin{color:var(--muted);font-style:italic;font-size:.9rem;margin:0 0 10px}
+.tag{display:inline-block;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:2px 10px;font-size:.8rem;margin:0 4px 4px 0}
+.details{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:.92rem}
+.card.open .details{display:block}
+.details dt{font-weight:600;margin-top:6px}
+.details dd{margin:0;color:var(--muted)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px}
+:root{--h1:#4fa564;--h2:#2a7a3d;--shadow:0 4px 14px rgba(40,80,40,.10)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--h1:#2f6b3d;--h2:#1f4a2b;--shadow:0 4px 14px rgba(0,0,0,.35)}}
+body{background:linear-gradient(180deg,var(--accent-soft) 0,var(--bg) 380px) no-repeat,var(--bg)}
+header{width:calc(100% - 40px);max-width:960px;margin:20px auto 0;padding:36px 28px;border-radius:24px;background:linear-gradient(135deg,var(--h1),var(--h2));color:#fff;box-shadow:var(--shadow)}
+header h1{font-size:clamp(1.6rem,5vw,2.3rem);color:#fff}
+header p{color:rgba(255,255,255,.92);max-width:620px;font-size:1.05rem}
+.search input[type="search"]{border-radius:999px;padding:12px 18px;box-shadow:var(--shadow)}
+.search input[type="search"]:focus,select:focus{outline:2px solid var(--accent);outline-offset:1px}
+select{border-radius:999px;padding:11px 14px;cursor:pointer}
+.camBtn{border-radius:999px;padding:12px 18px;font-weight:600;box-shadow:var(--shadow);transition:transform .15s}
+.camBtn:hover{transform:scale(1.04)}
+.tabs button{padding:11px 20px;font-weight:500;transition:background .15s}
+.tabs button:hover{background:var(--accent-soft)}
+.tabs button.on:hover{background:var(--accent)}
+.card{border-radius:22px;padding:20px;box-shadow:var(--shadow);transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-5px);box-shadow:0 10px 24px rgba(40,80,40,.18)}
+.emoji{width:64px;height:64px;border-radius:50%;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:2rem;margin-bottom:8px}
+.card h2{font-size:1.25rem}
+.tag{padding:4px 12px}
+.card.open{border-color:var(--accent)}
+#count{margin-top:4px}
+.pic{height:150px;margin:-20px -20px 14px;border-radius:22px 22px 0 0;overflow:hidden;background:var(--accent-soft);display:flex;align-items:center;justify-content:center;font-size:3.4rem}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.up{display:none;margin-top:12px;padding:8px 14px;border:1px dashed var(--accent);border-radius:999px;background:transparent;color:var(--accent);font-size:.9rem;cursor:pointer}
+.card.open .up{display:inline-block}
+body{font-family:"Karla","Trebuchet MS",Verdana,sans-serif;font-size:1.05rem}
+input,select,button{font-family:inherit}
+h1,h2{font-family:"Fraunces",Georgia,"Times New Roman",serif;font-weight:700;letter-spacing:-.01em}
+header h1{font-weight:700}
+.latin{font-family:"Fraunces",Georgia,serif;font-size:.95rem}
+.tabs button{font-weight:700}
+</style>
+</head>
+<body>
+<header>
+<h1>Willkommen bei BlattWerk 🌿</h1>
+<p>Finde heraus, was deine Pflanze braucht, damit sie sich richtig wohlfühlt. Stöbere durch die Reiter, such nach einem Namen oder mach einfach ein Foto. Tippe auf eine Karte für mehr Details.</p>
+</header>
+<div class="tabs" id="tabs"></div>
+<div class="tools">
+<div class="search"><input id="q" type="search" placeholder="Pflanze suchen …"><button id="cam" class="camBtn" hidden>📷 Foto</button><input id="file" type="file" accept="image/*" capture="environment" hidden></div>
+<select id="light"><option value="">Alle Standorte</option><option>Sonnig</option><option>Hell</option><option>Halbschatten</option><option>Schatten</option></select>
+<select id="care"><option value="">Alle Pflegestufen</option><option>Einfach</option><option>Mittel</option><option>Anspruchsvoll</option></select>
+</div>
+<div class="scan" id="scan" hidden></div>
+<div id="count"></div>
+<main id="list"></main>
+<script>
+const plants=[
+{n:"Monstera",l:"Monstera deliciosa",e:"🪴",w:"Alle 7–10 Tage",light:"Hell",care:"Einfach",tox:"Giftig für Haustiere",tip:"Erde zwischen dem Gießen oberflächlich antrocknen lassen. Freut sich über eine Rankhilfe."},
+{n:"Aloe Vera",l:"Aloe vera",e:"🌵",w:"Alle 14–21 Tage",light:"Sonnig",care:"Einfach",tox:"Leicht giftig bei Verzehr",tip:"Lieber zu trocken als zu nass. Im Winter kaum gießen."},
+{n:"Bogenhanf",l:"Sansevieria trifasciata",e:"🌱",w:"Alle 14–20 Tage",light:"Halbschatten",care:"Einfach",tox:"Leicht giftig für Haustiere",tip:"Fast nicht kaputtzukriegen. Staunässe unbedingt vermeiden."},
+{n:"Basilikum",l:"Ocimum basilicum",e:"🌿",w:"Alle 2–3 Tage",light:"Sonnig",care:"Mittel",tox:"Ungiftig, essbar",tip:"Blütenansätze abzwicken, dann wächst er buschiger. Erde gleichmäßig feucht halten."},
+{n:"Orchidee",l:"Phalaenopsis",e:"🌸",w:"1× pro Woche (Tauchbad)",light:"Hell",care:"Anspruchsvoll",tox:"Ungiftig",tip:"Wurzeln 10–15 Minuten in Wasser tauchen, dann gut abtropfen lassen."},
+{n:"Farn",l:"Nephrolepis exaltata",e:"🍃",w:"Alle 2–3 Tage",light:"Schatten",care:"Mittel",tox:"Ungiftig",tip:"Mag hohe Luftfeuchtigkeit. Gerne mit Wasser besprühen."},
+{n:"Gummibaum",l:"Ficus elastica",e:"🌳",w:"Alle 7–10 Tage",light:"Hell",care:"Einfach",tox:"Giftiger Milchsaft",tip:"Blätter ab und zu abwischen. Nicht ständig umstellen."},
+{n:"Lavendel",l:"Lavandula angustifolia",e:"💜",w:"Alle 5–7 Tage",light:"Sonnig",care:"Mittel",tox:"Leicht giftig für Katzen",tip:"Braucht viel Sonne und durchlässige Erde. Nach der Blüte zurückschneiden."},
+{n:"Efeutute",l:"Epipremnum aureum",e:"💚",w:"Alle 7 Tage",light:"Halbschatten",care:"Einfach",tox:"Giftig für Haustiere",tip:"Perfekt für Anfänger. Hängt oder rankt, Stecklinge wurzeln im Wasserglas."},
+{n:"Zimmerkalla",l:"Zantedeschia",e:"🤍",w:"Alle 2–3 Tage",light:"Hell",care:"Anspruchsvoll",tox:"Giftig",tip:"Mag es gleichmäßig feucht. Nach der Blüte braucht sie eine Ruhezeit."}
+];
+plants.push(
+{n:"Geranie",l:"Pelargonium",e:"🌺",w:"Alle 2–3 Tage",light:"Sonnig",care:"Einfach",tox:"Leicht giftig für Haustiere",tip:"Verblühtes regelmäßig abzupfen, dann blüht sie den ganzen Sommer."},
+{n:"Petunie",l:"Petunia",e:"🌼",w:"Täglich bei Hitze",light:"Sonnig",care:"Mittel",tox:"Ungiftig",tip:"Braucht viel Wasser und regelmäßig Dünger. Verblühtes entfernen."},
+{n:"Minze",l:"Mentha",e:"🍀",w:"Alle 2 Tage",light:"Halbschatten",care:"Einfach",tox:"Ungiftig, essbar",tip:"Wuchert gern. Am besten in einem eigenen Topf halten."},
+{n:"Schnittlauch",l:"Allium schoenoprasum",e:"🌾",w:"Alle 2–3 Tage",light:"Hell",care:"Einfach",tox:"Ungiftig, essbar (giftig für Hunde und Katzen)",tip:"Regelmäßig abschneiden, dann wächst er immer wieder nach."}
+);
+plants.push(
+{c:"Zimmerpflanzen",n:"Yucca-Palme",l:"Yucca elephantipes",e:"🌴",w:"Alle 10–14 Tage",light:"Hell",care:"Einfach",tox:"Leicht giftig für Haustiere",tip:"Speichert Wasser im Stamm. Lieber seltener, dafür durchdringend gießen."},
+{c:"Zimmerpflanzen",n:"Grünlilie",l:"Chlorophytum comosum",e:"🌿",w:"Alle 5–7 Tage",light:"Halbschatten",care:"Einfach",tox:"Ungiftig",tip:"Bildet kleine Ableger, die du einfach einpflanzen kannst."},
+{c:"Zimmerpflanzen",n:"Geldbaum",l:"Crassula ovata",e:"🪙",w:"Alle 14 Tage",light:"Sonnig",care:"Einfach",tox:"Leicht giftig für Haustiere",tip:"Dicke Blätter speichern Wasser. Im Winter nur sehr sparsam gießen."},
+{c:"Zimmerpflanzen",n:"Friedenslilie",l:"Spathiphyllum",e:"🤍",w:"Alle 5–7 Tage",light:"Halbschatten",care:"Einfach",tox:"Giftig für Haustiere",tip:"Lässt die Blätter hängen, wenn sie Durst hat. Danach erholt sie sich schnell."},
+{c:"Zimmerpflanzen",n:"Zamioculcas",l:"Zamioculcas zamiifolia",e:"🌱",w:"Alle 14–21 Tage",light:"Schatten",care:"Einfach",tox:"Giftig",tip:"Kommt mit wenig Licht und wenig Wasser aus. Perfekt für Vergessliche."},
+{c:"Zimmerpflanzen",n:"Birkenfeige",l:"Ficus benjamina",e:"🌳",w:"Alle 5–7 Tage",light:"Hell",care:"Mittel",tox:"Leicht giftig",tip:"Mag keinen Standortwechsel und wirft dann gern Blätter ab."},
+{c:"Zimmerpflanzen",n:"Dieffenbachie",l:"Dieffenbachia",e:"🍃",w:"Alle 7 Tage",light:"Halbschatten",care:"Mittel",tox:"Giftig, Saft reizt die Haut",tip:"Beim Umtopfen Handschuhe tragen. Keine Zugluft."},
+{c:"Zimmerpflanzen",n:"Weihnachtskaktus",l:"Schlumbergera",e:"🎄",w:"Alle 7–10 Tage",light:"Hell",care:"Mittel",tox:"Ungiftig",tip:"Blüht im Winter. Während der Knospenbildung nicht mehr drehen."},
+{c:"Zimmerpflanzen",n:"Calathea",l:"Calathea orbifolia",e:"🌿",w:"Alle 3–5 Tage",light:"Halbschatten",care:"Anspruchsvoll",tox:"Ungiftig",tip:"Mag hohe Luftfeuchtigkeit und kalkarmes Wasser, zum Beispiel Regenwasser."},
+{c:"Zimmerpflanzen",n:"Kaktus",l:"Cactaceae",e:"🌵",w:"Alle 14–28 Tage",light:"Sonnig",care:"Einfach",tox:"Ungiftig (aber Stacheln!)",tip:"Im Sommer sparsam gießen, im Winter fast gar nicht und kühl stellen."},
+{c:"Zimmerpflanzen",n:"Philodendron",l:"Philodendron scandens",e:"💚",w:"Alle 7 Tage",light:"Halbschatten",care:"Einfach",tox:"Giftig für Haustiere",tip:"Rankt oder hängt schön. Wächst auch bei wenig Licht."},
+{c:"Balkonpflanzen",n:"Fuchsie",l:"Fuchsia",e:"🌸",w:"Alle 2–3 Tage",light:"Halbschatten",care:"Mittel",tox:"Ungiftig",tip:"Mag keine pralle Mittagssonne. Verblühtes regelmäßig entfernen."},
+{c:"Balkonpflanzen",n:"Begonie",l:"Begonia",e:"🌺",w:"Alle 3 Tage",light:"Halbschatten",care:"Einfach",tox:"Leicht giftig",tip:"Nur die Erde gießen, nicht die Blätter und Blüten."},
+{c:"Balkonpflanzen",n:"Hortensie",l:"Hydrangea",e:"💠",w:"Alle 2 Tage",light:"Halbschatten",care:"Mittel",tox:"Giftig",tip:"Sehr durstig. Am besten mit kalkarmem Wasser gießen."},
+{c:"Balkonpflanzen",n:"Tomate",l:"Solanum lycopersicum",e:"🍅",w:"Täglich bis alle 2 Tage",light:"Sonnig",care:"Mittel",tox:"Früchte essbar, Blätter giftig",tip:"Von unten an der Wurzel gießen und regelmäßig düngen."},
+{c:"Balkonpflanzen",n:"Erdbeere",l:"Fragaria",e:"🍓",w:"Alle 2 Tage",light:"Sonnig",care:"Einfach",tox:"Ungiftig, essbar",tip:"Erde gleichmäßig feucht halten. Gut für Hängeampeln."},
+{c:"Balkonpflanzen",n:"Kapuzinerkresse",l:"Tropaeolum majus",e:"🧡",w:"Alle 2–3 Tage",light:"Sonnig",care:"Einfach",tox:"Ungiftig, Blüten essbar",tip:"Wächst schnell und rankt. Blüten schmecken leicht scharf."},
+{c:"Kräuter",n:"Rosmarin",l:"Salvia rosmarinus",e:"🌲",w:"Alle 5–7 Tage",light:"Sonnig",care:"Einfach",tox:"Ungiftig, essbar",tip:"Mag es trocken. Staunässe ist sein größter Feind."},
+{c:"Kräuter",n:"Thymian",l:"Thymus vulgaris",e:"🌿",w:"Alle 7 Tage",light:"Sonnig",care:"Einfach",tox:"Ungiftig, essbar",tip:"Kommt mit wenig Wasser aus. Im Frühjahr kräftig zurückschneiden."},
+{c:"Kräuter",n:"Petersilie",l:"Petroselinum crispum",e:"🥬",w:"Alle 2 Tage",light:"Halbschatten",care:"Mittel",tox:"Ungiftig, essbar",tip:"Erde nie ganz austrocknen lassen. Außen zuerst ernten."},
+{c:"Kräuter",n:"Salbei",l:"Salvia officinalis",e:"🍃",w:"Alle 5–7 Tage",light:"Sonnig",care:"Einfach",tox:"Ungiftig, essbar",tip:"Durchlässige Erde und viel Sonne. Nach der Blüte zurückschneiden."},
+{c:"Kräuter",n:"Koriander",l:"Coriandrum sativum",e:"🌱",w:"Alle 2 Tage",light:"Hell",care:"Mittel",tox:"Ungiftig, essbar",tip:"Schießt bei Hitze schnell in Blüte. Lieber öfter neu aussäen."}
+);
+plants.push(
+{c:"Zimmerpflanzen",n:"Drachenbaum",l:"Dracaena marginata",e:"🌴",w:"Alle 7–10 Tage",light:"Hell",care:"Einfach",tox:"Leicht giftig für Haustiere",tip:"Braune Blattspitzen deuten auf trockene Luft oder kalkhaltiges Wasser hin."},
+{c:"Zimmerpflanzen",n:"Pfeffergesicht",l:"Peperomia obtusifolia",e:"🍀",w:"Alle 7–10 Tage",light:"Halbschatten",care:"Einfach",tox:"Ungiftig",tip:"Die dicken Blätter speichern Wasser. Lieber zu trocken als zu nass."},
+{c:"Zimmerpflanzen",n:"Kentia-Palme",l:"Howea forsteriana",e:"🌴",w:"Alle 5–7 Tage",light:"Halbschatten",care:"Einfach",tox:"Ungiftig",tip:"Sehr genügsam und verträgt auch schattigere Ecken. Wächst langsam."},
+{c:"Zimmerpflanzen",n:"Schefflera",l:"Schefflera arboricola",e:"🌳",w:"Alle 7 Tage",light:"Hell",care:"Einfach",tox:"Giftig für Haustiere",tip:"Mag es gleichmäßig. Zugluft und Staunässe vermeiden."},
+{c:"Zimmerpflanzen",n:"Bergpalme",l:"Chamaedorea elegans",e:"🌴",w:"Alle 5–7 Tage",light:"Halbschatten",care:"Einfach",tox:"Ungiftig",tip:"Kompakte Palme für Anfänger. Ab und zu die Blätter besprühen."},
+{c:"Zimmerpflanzen",n:"Alocasia",l:"Alocasia amazonica",e:"🍃",w:"Alle 5–7 Tage",light:"Hell",care:"Anspruchsvoll",tox:"Giftig",tip:"Braucht Wärme und hohe Luftfeuchtigkeit. Zugluft mag sie gar nicht."},
+{c:"Zimmerpflanzen",n:"Wachsblume",l:"Hoya carnosa",e:"🌸",w:"Alle 10–14 Tage",light:"Hell",care:"Einfach",tox:"Ungiftig",tip:"Blüht erst nach einigen Jahren. Die Blütenstiele nicht abschneiden."},
+{c:"Zimmerpflanzen",n:"Usambaraveilchen",l:"Saintpaulia",e:"💜",w:"Alle 5–7 Tage (von unten)",light:"Hell",care:"Mittel",tox:"Ungiftig",tip:"Wasser in den Untersetzer geben, nicht auf die Blätter."},
+{c:"Zimmerpflanzen",n:"Alpenveilchen",l:"Cyclamen persicum",e:"🌷",w:"Alle 3–4 Tage (von unten)",light:"Hell",care:"Mittel",tox:"Giftig, besonders die Knolle",tip:"Mag es kühl. Verblühtes samt Stiel herausdrehen."},
+{c:"Sukkulenten",n:"Echeveria",l:"Echeveria elegans",e:"🪴",w:"Alle 10–14 Tage",light:"Sonnig",care:"Einfach",tox:"Ungiftig",tip:"Wasser nicht in die Blattrosette gießen, sonst faulen die Blätter."},
+{c:"Sukkulenten",n:"Haworthia",l:"Haworthiopsis",e:"🌵",w:"Alle 14 Tage",light:"Hell",care:"Einfach",tox:"Ungiftig",tip:"Kommt auch mit weniger Licht zurecht. Perfekt fürs Büro."},
+{c:"Sukkulenten",n:"Lebende Steine",l:"Lithops",e:"🪨",w:"Alle 4–6 Wochen",light:"Sonnig",care:"Anspruchsvoll",tox:"Ungiftig",tip:"Sehr sparsam gießen. Im Winter gar nicht."},
+{c:"Sukkulenten",n:"Hauswurz",l:"Sempervivum",e:"🌱",w:"Alle 7–10 Tage",light:"Sonnig",care:"Einfach",tox:"Ungiftig",tip:"Winterhart und robust. Auch draußen im Topf oder Steingarten möglich."},
+{c:"Sukkulenten",n:"Kalanchoe",l:"Kalanchoe blossfeldiana",e:"🌼",w:"Alle 10–14 Tage",light:"Hell",care:"Einfach",tox:"Giftig für Haustiere",tip:"Blüht lange. Verblühtes abschneiden, dann kommen neue Blüten."},
+{c:"Balkonpflanzen",n:"Studentenblume",l:"Tagetes",e:"🧡",w:"Alle 2–3 Tage",light:"Sonnig",care:"Einfach",tox:"Leicht giftig für Haustiere",tip:"Blüht bis zum Frost. Verblühtes abzupfen verlängert die Blüte."},
+{c:"Balkonpflanzen",n:"Wandelröschen",l:"Lantana camara",e:"🌺",w:"Alle 2–3 Tage",light:"Sonnig",care:"Mittel",tox:"Giftig, besonders die Beeren",tip:"Liebt Wärme. Vor dem ersten Frost ins Haus holen."},
+{c:"Balkonpflanzen",n:"Dahlie",l:"Dahlia",e:"🌸",w:"Alle 2–3 Tage",light:"Sonnig",care:"Mittel",tox:"Leicht giftig für Haustiere",tip:"Regelmäßig düngen. Die Knollen im Herbst frostfrei lagern."},
+{c:"Balkonpflanzen",n:"Stiefmütterchen",l:"Viola × wittrockiana",e:"💛",w:"Alle 2–3 Tage",light:"Halbschatten",care:"Einfach",tox:"Ungiftig, Blüten essbar",tip:"Blüht schon im Frühjahr und Herbst. Mag es kühl."},
+{c:"Gartenpflanzen",n:"Rose",l:"Rosa",e:"🌹",w:"Alle 5–7 Tage bei Trockenheit",light:"Sonnig",care:"Mittel",tox:"Ungiftig (aber Dornen!)",tip:"Am besten morgens an der Wurzel gießen, nicht über die Blätter."},
+{c:"Gartenpflanzen",n:"Sonnenhut",l:"Echinacea purpurea",e:"🌼",w:"Alle 7 Tage bei Trockenheit",light:"Sonnig",care:"Einfach",tox:"Ungiftig",tip:"Bienen und Schmetterlinge lieben ihn. Wächst fast von allein."},
+{c:"Gartenpflanzen",n:"Funkie",l:"Hosta",e:"🍃",w:"Alle 5–7 Tage",light:"Schatten",care:"Einfach",tox:"Giftig für Haustiere",tip:"Perfekt für schattige Ecken. Schnecken knabbern sie gern an."},
+{c:"Gartenpflanzen",n:"Pfingstrose",l:"Paeonia",e:"🌸",w:"Alle 7 Tage bei Trockenheit",light:"Sonnig",care:"Einfach",tox:"Leicht giftig für Haustiere",tip:"Nicht zu tief pflanzen, sonst blüht sie nicht. Mag keinen Umzug."},
+{c:"Gartenpflanzen",n:"Sonnenblume",l:"Helianthus annuus",e:"🌻",w:"Alle 3–4 Tage",light:"Sonnig",care:"Einfach",tox:"Ungiftig, Kerne essbar",tip:"Wächst schnell. Hohe Sorten brauchen einen Stützstab."},
+{c:"Gartenpflanzen",n:"Tulpe",l:"Tulipa",e:"🌷",w:"Nur bei Trockenheit",light:"Sonnig",care:"Einfach",tox:"Giftig für Haustiere (Zwiebel)",tip:"Zwiebeln im Herbst setzen. Nach der Blüte das Laub einziehen lassen."},
+{c:"Gartenpflanzen",n:"Rhododendron",l:"Rhododendron",e:"💮",w:"Alle 3–5 Tage bei Trockenheit",light:"Halbschatten",care:"Mittel",tox:"Giftig",tip:"Braucht saure Erde und kalkarmes Wasser, zum Beispiel Regenwasser."},
+{c:"Gartenpflanzen",n:"Sommerflieder",l:"Buddleja davidii",e:"🦋",w:"Alle 7 Tage bei Trockenheit",light:"Sonnig",care:"Einfach",tox:"Ungiftig",tip:"Zieht Schmetterlinge an. Im Frühjahr kräftig zurückschneiden."},
+{c:"Obst & Gemüse",n:"Gurke",l:"Cucumis sativus",e:"🥒",w:"Täglich bis alle 2 Tage",light:"Sonnig",care:"Mittel",tox:"Ungiftig, essbar",tip:"Sehr durstig. Regelmäßig ernten, dann trägt sie mehr."},
+{c:"Obst & Gemüse",n:"Paprika",l:"Capsicum annuum",e:"🫑",w:"Alle 2–3 Tage",light:"Sonnig",care:"Mittel",tox:"Ungiftig, Früchte essbar",tip:"Mag es warm und geschützt. Gleichmäßig feucht halten."},
+{c:"Obst & Gemüse",n:"Radieschen",l:"Raphanus sativus",e:"🌱",w:"Alle 2 Tage",light:"Hell",care:"Einfach",tox:"Ungiftig, essbar",tip:"Schnellstes Gemüse für Anfänger: erntereif nach etwa 4 Wochen."},
+{c:"Obst & Gemüse",n:"Pflücksalat",l:"Lactuca sativa",e:"🥬",w:"Alle 1–2 Tage",light:"Halbschatten",care:"Einfach",tox:"Ungiftig, essbar",tip:"Äußere Blätter ernten, dann wächst er weiter. Mag keine pralle Hitze."},
+{c:"Obst & Gemüse",n:"Zucchini",l:"Cucurbita pepo",e:"🥒",w:"Alle 2–3 Tage",light:"Sonnig",care:"Mittel",tox:"Ungiftig, essbar",tip:"Braucht viel Platz und Nährstoffe. Früchte jung ernten."},
+{c:"Obst & Gemüse",n:"Heidelbeere",l:"Vaccinium corymbosum",e:"🫐",w:"Alle 2–3 Tage",light:"Sonnig",care:"Mittel",tox:"Ungiftig, essbar",tip:"Braucht saure Erde und kalkarmes Wasser. Gut im großen Topf."},
+{c:"Obst & Gemüse",n:"Karotte",l:"Daucus carota",e:"🥕",w:"Alle 2–3 Tage",light:"Sonnig",care:"Einfach",tox:"Ungiftig, essbar",tip:"Tiefer Topf und lockere Erde, damit die Rüben gerade wachsen."},
+{c:"Kräuter",n:"Oregano",l:"Origanum vulgare",e:"🌿",w:"Alle 5–7 Tage",light:"Sonnig",care:"Einfach",tox:"Essbar",tip:"Mag es trocken und sonnig. Schmeckt getrocknet noch intensiver."},
+{c:"Kräuter",n:"Zitronenmelisse",l:"Melissa officinalis",e:"🍋",w:"Alle 3 Tage",light:"Halbschatten",care:"Einfach",tox:"Ungiftig, essbar",tip:"Wuchert gern. Ideal für frischen Tee."},
+{c:"Kräuter",n:"Dill",l:"Anethum graveolens",e:"🌾",w:"Alle 2–3 Tage",light:"Sonnig",care:"Mittel",tox:"Ungiftig, essbar",tip:"Mag keinen Umzug. Am besten direkt an den endgültigen Platz säen."}
+);
+const cats={"Monstera":"Zimmerpflanzen","Aloe Vera":"Zimmerpflanzen","Bogenhanf":"Zimmerpflanzen","Orchidee":"Zimmerpflanzen","Farn":"Zimmerpflanzen","Gummibaum":"Zimmerpflanzen","Efeutute":"Zimmerpflanzen","Zimmerkalla":"Zimmerpflanzen","Lavendel":"Balkonpflanzen","Geranie":"Balkonpflanzen","Petunie":"Balkonpflanzen","Basilikum":"Kräuter","Minze":"Kräuter","Schnittlauch":"Kräuter"};
+plants.forEach(p=>p.c=p.c||cats[p.n]);
+const moved={"Aloe Vera":"Sukkulenten","Geldbaum":"Sukkulenten","Kaktus":"Sukkulenten","Tomate":"Obst & Gemüse","Erdbeere":"Obst & Gemüse"};
+plants.forEach(p=>{if(moved[p.n])p.c=moved[p.n];});
+let tab="Alle";
+let photos={},canUpload=false,pickFor=null;
+const slug=n=>n.toLowerCase().replace(/ä/g,"ae").replace(/ö/g,"oe").replace(/ü/g,"ue").replace(/[^a-z0-9]+/g,"-");
+const picker=document.createElement("input");picker.type="file";picker.accept="image/*";picker.hidden=true;document.body.appendChild(picker);
+function resize(f){return new Promise((ok,no)=>{const img=new Image();img.onload=()=>{const s=Math.min(1,900/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext("2d").drawImage(img,0,0,c.width,c.height);c.toBlob(b=>b?ok(b):no(new Error("blob")),"image/jpeg",.85);};img.onerror=no;img.src=URL.createObjectURL(f);});}
+const tabs=["Alle","Zimmerpflanzen","Sukkulenten","Balkonpflanzen","Gartenpflanzen","Kräuter","Obst & Gemüse"];
+const list=document.getElementById("list"),q=document.getElementById("q"),light=document.getElementById("light"),care=document.getElementById("care"),count=document.getElementById("count");
+function render(){
+const t=q.value.trim().toLowerCase();
+const r=plants.filter(p=>(tab==="Alle"||p.c===tab)&&(!t||(p.n+" "+p.l).toLowerCase().includes(t))&&(!light.value||p.light===light.value)&&(!care.value||p.care===care.value));
+count.textContent=r.length+" von "+plants.length+" Pflanzen";
+list.innerHTML=r.length?"":'<div class="empty">Keine Pflanze gefunden 🌱</div>';
+r.forEach(p=>{
+const d=document.createElement("div");d.className="card";
+d.innerHTML='<div class="pic">'+(photos[slug(p.n)]?'<img loading="lazy" alt="'+p.n+'" src="/_blob/'+photos[slug(p.n)]+'">':'<span>'+p.e+'</span>')+'</div><h2>'+p.n+'</h2><p class="latin">'+p.l+'</p><span class="tag">💧 '+p.w+'</span><span class="tag">☀️ '+p.light+'</span><span class="tag">'+p.care+'</span><dl class="details"><dt>Giftigkeit</dt><dd>'+p.tox+'</dd><dt>Pflegetipp</dt><dd>'+p.tip+'</dd></dl>';
+d.onclick=()=>d.classList.toggle("open");
+if(canUpload){const u=document.createElement("button");u.className="up";u.textContent=photos[slug(p.n)]?"📷 Bild ändern":"📷 Bild hinzufügen";u.onclick=ev=>{ev.stopPropagation();pickFor=p;picker.click();};d.appendChild(u);}
+list.appendChild(d);});
+}
+const tabBar=document.getElementById("tabs");
+function drawTabs(){tabBar.innerHTML="";tabs.forEach(t=>{const b=document.createElement("button");const n=t==="Alle"?plants.length:plants.filter(p=>p.c===t).length;b.textContent=t+" ("+n+")";b.className=t===tab?"on":"";b.onclick=()=>{tab=t;drawTabs();render();};tabBar.appendChild(b);});}
+drawTabs();
+[q,light,care].forEach(e=>e.addEventListener("input",render));
+
+/* ===== Foto-Erkennung mit Pl@ntNet (über Netlify Function) ===== */
+(async()=>{
+const btn=document.getElementById("cam"),file=document.getElementById("file"),box=document.getElementById("scan");
+
+function shrink(f){return new Promise((ok,no)=>{const img=new Image();img.onload=()=>{const s=Math.min(1,1024/Math.max(img.width,img.height));const c=document.createElement("canvas");c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext("2d").drawImage(img,0,0,c.width,c.height);c.toBlob(b=>b?ok(b):no(new Error("blob")),"image/jpeg",.85);};img.onerror=no;img.src=URL.createObjectURL(f);});}
+
+function toBase64(blob){return new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result.split(",")[1]);r.onerror=no;r.readAsDataURL(blob);});}
+
+/* Plantnet liefert wissenschaftliche Namen. Diese Zuordnung deckt Synonyme ab. */
+const synonyms={"rosmarinus officinalis":"Salvia rosmarinus","aloe barbadensis":"Aloe vera","aloe barbadensis miller":"Aloe vera","dracaena trifasciata":"Sansevieria trifasciata","sansevieria trifasciata":"Sansevieria trifasciata","ficus elastica":"Ficus elastica","scindapsus aureus":"Epipremnum aureum","yucca gigantea":"Yucca elephantipes","hylotelephium":"Sempervivum","lycopersicon esculentum":"Solanum lycopersicum","haworthiopsis attenuata":"Haworthiopsis","haworthia":"Haworthiopsis","viola x wittrockiana":"Viola × wittrockiana","viola wittrockiana":"Viola × wittrockiana","zantedeschia aethiopica":"Zantedeschia","pelargonium x hortorum":"Pelargonium","pelargonium zonale":"Pelargonium","petunia x hybrida":"Petunia","petunia hybrida":"Petunia","nephrolepis exaltata":"Nephrolepis exaltata","mentha x piperita":"Mentha","mentha spicata":"Mentha","mentha suaveolens":"Mentha","phalaenopsis":"Phalaenopsis"};
+
+function findMatch(sci){
+  const s=sci.toLowerCase().replace(/ × /g," x ").trim();
+  const genus=s.split(" ")[0];
+  const syn=synonyms[s];
+  const lat=l=>l.toLowerCase().replace(/ × /g," x ");
+  return plants.find(p=>syn&&lat(p.l)===syn.toLowerCase().replace(/ × /g," x "))
+      || plants.find(p=>{const l=lat(p.l);return s===l||s.startsWith(l+" ");})
+      || plants.find(p=>{const l=lat(p.l);return !l.includes(" ")&&l===genus;});
+}
+
+btn.hidden=false;
+btn.onclick=()=>file.click();
+
+file.onchange=async()=>{
+  const f=file.files[0];if(!f)return;
+  box.hidden=false;box.textContent="Pflanze wird erkannt …";btn.disabled=true;
+  try{
+    const image=await toBase64(await shrink(f));
+    const res=await fetch("/.netlify/functions/identify",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({image,organ:"auto"})
+    });
+    if(res.status===404){box.textContent="Keine passende Pflanze gefunden. Versuch es mit einem näheren Foto (Blatt oder Blüte).";return;}
+    if(res.status===429){box.textContent="Das Tageslimit der Erkennung ist erreicht. Bitte versuch es morgen wieder.";return;}
+    if(!res.ok)throw new Error("HTTP "+res.status);
+    const data=await res.json();
+    const top=data.results&&data.results[0];
+    if(!top){box.textContent="Ich konnte keine Pflanze erkennen. Versuch es mit einem näheren Foto.";return;}
+
+    const sci=top.species.scientificNameWithoutAuthor;
+    const common=(top.species.commonNames||[])[0];
+    const pct=Math.round(top.score*100);
+    const m=findMatch(sci);
+
+    if(m){
+      tab="Alle";drawTabs();q.value=m.n;light.value="";care.value="";render();
+      box.textContent="Das sieht nach „"+m.n+"“ aus (Sicherheit: "+pct+" %).";
+      const c=list.querySelector(".card");
+      if(c){c.classList.add("open");c.scrollIntoView({behavior:"smooth",block:"center"});}
+    }else{
+      box.textContent="Vermutlich: "+(common?common+" ":"")+"("+sci+", "+pct+" %). Diese Pflanze ist noch nicht im Lexikon.";
+    }
+  }catch(e){
+    box.textContent="Das hat leider nicht geklappt. Versuch es noch einmal.";
+  }finally{btn.disabled=false;file.value="";}
+};
+})();
+
+/* ===== Bild-Upload für Karten (funktioniert nur im Claude-Hosting, auf Netlify passiert nichts) ===== */
+(async()=>{
+let assets=null,db=null,user=null;
+try{if(window.claude){[assets,db,user]=await Promise.all([claude.use("assets"),claude.use("db"),claude.use("user")]);}}catch(e){}
+if(db){try{db.collection("photos").onSnapshot(s=>{photos={};s.docs.forEach(x=>{const v=x.data();if(v&&v.id)photos[x.id]=v.id;});render();},()=>{});}catch(e){}}
+try{canUpload=!!(assets&&db&&user&&user.canEdit());}catch(e){canUpload=false;}
+if(canUpload)render();
+picker.onchange=async()=>{const f=picker.files[0];if(!f||!pickFor||!canUpload)return;
+count.textContent="Bild wird gespeichert …";
+try{const blob=await resize(f);const a=await assets.upload(blob);await db.collection("photos").doc(slug(pickFor.n)).set({id:a.id});}catch(e){count.textContent="Das Bild konnte nicht gespeichert werden.";}
+picker.value="";};
+})();
+render();
+</script>
+</body>
+</html>
